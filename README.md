@@ -10,3 +10,8 @@
 
 ### 中文
 - jieba分词、去停用词
+
+
+
+## 参考文献
+- [1] 2019 | EMNLP | Detect Camouflaged Spam Content via StoneSkipping: Graph and Text Joint Embedding for Chinese Character Variation Representation
