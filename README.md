@@ -26,6 +26,16 @@
 ### 中文
 - 小写、jieba分词(可自定义用户词典)、(去停用词)、将数字和符号一般化
 
+### 对抗分类[27]
+- 数据被对手主动操纵，试图使分类器产生假负类-->修改分类器-->又会有新的出现
+- 解决方案：将分类看成是分类器和对手之间的博弈，然后根据对手的最优策略生成一个最优分类器，并能自动调整分类器以适应对手不断变化的操作
+  - 首先将问题形式化为一个成本敏感的分类器和一个成本敏感的对手之间的博弈
+
+
+
+
+
+
 ### 中文垃圾邮件检测
 - StoneSkipping[1]
   - 现有的基于关键词的垃圾邮件检测方法 --> 问题1：伪装逃脱检测(汉字的字形和发音的变异)
@@ -98,3 +108,4 @@
 - [24] 2020 | ACL | Don’t Stop Pretraining: Adapt Language Models to Domains and Tasks
 - [25] 2020 | WWW | Analyzing and Detecting Adversarial Spam on a Large-scale Online APP Review System
 - [26] 2015 | KDD | Collective opinion spam detection: Bridging review networks and metadata 
+- [27] 2004 | KDD | Adversarial Classification
