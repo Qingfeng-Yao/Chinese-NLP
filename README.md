@@ -72,6 +72,49 @@
   - 解决方案：1)分析评论特征(包括内容特征和用户行为特征，并分别进行核密度估计)，针对每个特征确定适当的阈值，以此获得最初的有标签数据；2)先单独训练两个模块：BBM(基于行为)和CBM(基于内容)，再联合训练(在每个epoch，直到收敛)[26]
   - 可创建黑白名单词汇：训练模型word2vec
   
+### social spam detection
+- 社交书签网站(社交标签系统)[30]: 
+  - 需要管理员的时间和精力来手动过滤或删除spam
+  - 支持标签系统的数据结构称为folksonomy，表示为超图，一个三元组的集合(三元组指用户u用标签t标注资源r，资源是网址；三元组可表示为连接用户、资源和标签的超边)，一个post可有多个标签
+  - spammer会使用流行的标签标注，这些标签互相之间没什么关系且与网址无关
+  - 提出六类不同特征(social spam的不同属性)，每个特征都提供一个有用信号来区分spammer和合法用户；之后这些特征用于各种机器学习算法做分类
+- social spam detection framework[31]: 
+  - 每个社交网络都需要建立自己的spam过滤器，并支持一个spam小组来跟进预防spam的最新进展
+  - social spam：低质量信息
+  - 框架可用于所有社交网络(新的社交网络可很容易插入系统中)，在一个社交网络中检测到新的spam，可在整个社交网络中快速识别
+  - 框架分为三个部分：
+    - 映射和装配: 其中映射是指将一个社交网络特定对象转换成一个标准模型(如profile model、message model、webpage model)；如果可以基于这个对象获取关联对象，则在这里组装
+    - 预先过滤：用fast-path技术(如黑名单/IP、URL或相似度匹配/哈希、shingling)根据已知spam对象检查传入对象
+    - 分类：有监督机器学习用于分类传入对象和关联对象，将贝叶斯技术与分类结果结合得到spam和non-spam
+- 社交系统中的信息质量[32]: 
+  - 社交网络、社交媒体网站、大规模信息共享社区、crowd-based资助服务、网络规模的众包系统
+  - social spam、campaigns、misinformation、crowdturfing
+    - social spam: 如何检测可疑的URL；讨论社会资本家和spammers之间的关系，以及如何惩罚spammers和这些社会资本家；有监督和无监督spam detection方法；Social Honeypot[33]的提出是为了监测spammers的行为并收集他们的信息；利用群体智慧识别social spammers
+    - campaigns: 基于图的social spam campaign detection；内容驱动的campaign detection；使用分类方法检测和跟踪社交媒体中的政治campaigns；基于行为模型的频繁itemset挖掘方法检测虚假评论者群体
+    - misinformation: 利用群体力量的分类方法来衡量社交媒体上的信息可信度；中国领先的微博服务提供商新浪微博的自动谣言检测方法；识别飓风桑迪期间Twitter上的假图片；紧急情况下信息可信度的方法(该方法包括无监督方法和有监督方法来检测消息可信度)
+    - crowdturfing: 介绍新闻媒体报道的实例；了解在众包网站上有什么样的众包任务；了解东西方众包网站的crowdturfing市场规模；追踪并揭示社交媒体的众包操控，特别是关注西方的众包网站，并概述如何在社交媒体上发现众包者crowdturfers
+  - social spam与传统的spam(比如email和web spam)的不同
+    - 开放性，任何人都可以创建一个社交帐户，方便与其他用户联系
+    - URL黑名单在识别新的威胁方面太慢了，使得超过90%的访问者能够在页面被列入黑名单之前查看该页面
+    - 用于模糊处理的URL缩短服务
+    - 使用API自动控制机器人程序
+  - 改善信息质量：揭示和检测恶意参与者(如social spammers、内容污染者、众包者)和低质量内容
+- 无监督的spam detection[34]: 
+  - 需及时检测spam --> 无监督可节省训练消耗
+  - 现有无监督检测方案严重依赖于不断变化的spamming模式以避免被检测
+  - 提出一个基于sybli防御的spam detection方案SD2，该方案通过考虑社交网络关系，显著优于现有方案
+  - 为了使其在面对日益严重的spam攻击时具有很强的鲁棒性，进一步设计了一种无监督spam detection方案UNIK
+    - 不是直接检测spammers，而是故意从网络中删除non-spammers，同时利用社交图和用户链接图
+    - 虽然spammers不断改变其模式来逃避检测，non-spammers不必这样做，因此具有相对non-valatile的模式
+    - 基于UNIK的检测结果，进一步分析在这个社交网站上发现的几个spam campaigns
+
+### campaign detection
+- social spam campaigns detection[35]
+- 内容驱动的campaigns detection[36][37]
+  - 研究从大型基于消息的图中分离出一致的campaigns的图挖掘技术
+  - 从实验中检测到5类campaigns：spam、promotion、template、news、celebrity campaigns
+
+  
 ### 无监督文本分类
 - Keyword enrichment(KE)[6]
   - 有个具体的实际场景，即银行业中的风险事件分类，原先这些事件已经映射到大约20个风险类中，但更多的风险类有助于更好地捕捉事件的细微差别并进行相关比较，所以就诞生了一个新的分类法，该分类法由264个类组成。这样就需要将所有事件映射到这264个类中。由于这是一个新的分类法，没有可用的有标签的数据，且鉴于该领域的特殊性和专家的缺乏，不可能为每一类别获得许多有标签的例子 --> 问题：给定一组已知的类别和若干未标记的文档，将所有未标记的文档映射到它所属的类别中去，且分类效果与有监督方法相当
@@ -123,3 +166,11 @@
 - [27] 2004 | KDD | Adversarial Classification
 - [28] 2010 | SMUC | Spam Detection with a Content-based Random-walk Algorithm
 - [29] 2011 | ICDM | Review Graph based Online Store Review Spammer Detection
+- [30] 2009 | Social Spam Detection
+- [31] 2011 | A Social-Spam Detection Framework
+- [32] 2014 | WWW | [Social Spam, Campaigns, Misinformation and Crowdturfing](https://web.cs.wpi.edu/~kmlee/tutorial/www2014.html)
+- [33] 2011 | AAAI | Seven Months with the Devils: A Long-Term Study of Content Polluters on Twitter
+- [34] 2013 | CIKM | UNIK: Unsupervised Social Network Spam Detection
+- [35] 2010 | Detecting and Characterizing Social Spam Campaigns
+- [36] 2011 | CIKM | Content-Driven Detection of Campaigns in Social Media
+- [37] 2013 | Campaign Extraction from Social Media
