@@ -46,7 +46,6 @@
     - 问题2: 不平衡问题，即垃圾文本的数量明显小于普通文本数量
     - 问题3: 效率问题，即经典的主动学习是通过两两比较有标签样本和无标签样本来确定要标注的样本的，这样计算复杂度太高
   - 解决方案：问题1的解决思路同[1]。要解决问题2、3，作者通过借鉴文献[5]的思路，引入一个”self-diversity”标准来确定要标注的样本。这样的标准具有定位重要样本和降低计算复杂度的能力，尤其在中文垃圾检测背景下垃圾候选样本更可能获得一个更大的“self-diversity”
-  - 可提供一个黑名单词汇(可自动更新)
 
 ### web spam detection
 - 基于内容的随机游走算法[28]: 
@@ -110,8 +109,12 @@
 
 ### campaign detection
 - social spam campaigns detection[35]
-- 内容驱动的campaigns detection[36][37]
+- 内容驱动的campaigns detection[36][37]：社交媒体
   - 研究从大型基于消息的图中分离出一致的campaigns的图挖掘技术
+  - 检测coordinated free text campaigns in social media
+    - coordinated spam消息
+    - templated消息: 例如，第三方应用程序自动向社交媒体网站发布消息，宣布用户操作，如加入游戏或观看视频
+    - 大量时间同步消息: 例如，许多用户可能会在新闻最初被报道后再次发布新闻标题
   - 从实验中检测到5类campaigns：spam、promotion、template、news、celebrity campaigns
 
   
