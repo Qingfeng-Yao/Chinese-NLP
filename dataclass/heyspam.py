@@ -13,11 +13,12 @@ import dataclass
 from . import utils
 
 class Heyspam:
-    def __init__(self, root=dataclass.root, is_deep=True, is_jieba=True, is_balanced=True): # is_jieba参数为真则使用jieba分词且去停用词，反之则使用bert分字 is_deep参数为真则表示使用深度模型，数据需要转成张量形式 is_balanced参数为真则要求两类数据量相等
+    def __init__(self, root=dataclass.root, is_deep=True, is_jieba=True, is_balanced=True, sequence_length=512): # is_jieba参数为真则使用jieba分词且去停用词，反之则使用bert分字 is_deep参数为真则表示使用深度模型，数据需要转成张量形式 is_balanced参数为真则要求两类数据量相等 sequence_length参数用于限制深度模型的输入序列长度
 
         self.n_classes = 2  # 0: normal, 1: outlier
         self.normal_classes = ["普通内容"]
         self.outlier_classes = ["垃圾内容"]
+        self.sequence_length = sequence_length
 
         self.train_set, self.test_set = heyspam_dataset(directory=root, train=True, test=True, is_balanced=is_balanced)
         print("self.train {} self.test {}".format(len(self.train_set), len(self.test_set))) # self.train 48404 self.test 12101  |  self.train 5584 self.test 1396
@@ -29,10 +30,7 @@ class Heyspam:
                 row['label'] = 0 if row['label'] in self.normal_classes else 1
         
         for i, row in enumerate(self.test_set):
-            if is_deep:
-                row['label'] = torch.tensor(0) if row['label'] in self.normal_classes else torch.tensor(1)
-            else:
-                row['label'] = 0 if row['label'] in self.normal_classes else 1
+            row['label'] = 0 if row['label'] in self.normal_classes else 1
 
         if not is_jieba:
             self.encoder = BertTokenizer.from_pretrained('bert-base-chinese', cache_dir=root+"/bert_cache") 
@@ -71,12 +69,12 @@ class Heyspam:
         for row in datasets_iterator(self.train_set, self.test_set):
             if is_jieba:
                 if is_deep:
-                    vector = [self.stoi.get(token, unknown_index) for token in row['text'].split()[:512]]  
+                    vector = [self.stoi.get(token, unknown_index) for token in row['text'].split()[:self.sequence_length]]  
                     row['text'] = torch.LongTensor(vector)
             else:
                 text = self.encoder.tokenize(row['text'])
                 if is_deep:
-                    vector = [self.stoi.get(token, unknown_index) for token in text[:512]]  
+                    vector = [self.stoi.get(token, unknown_index) for token in text[:self.sequence_length]]  
                     row['text'] = torch.LongTensor(vector)
                 else:
                     row['text'] = " ".join(text)
