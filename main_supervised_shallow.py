@@ -8,7 +8,7 @@ from sklearn.metrics import roc_auc_score, accuracy_score
 
 import dataclass
 
-parser = argparse.ArgumentParser(description='spam detection using supervised machine learning')
+parser = argparse.ArgumentParser(description='using supervised machine learning')
 parser.add_argument(
     '--dataset',
     default='Heyspam',
